@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ case.subject }}{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'outwards' %}">Outward Cases</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'outward_cases' case.outward.pk %}">{{ case.outward.reference }}</a></li>
+  <li class="breadcrumb-item active">{{ case.progress }}</li>
+{% endblock %}
+
+{% block content %}
+
+  <div class="mb-4">
+    <a href="{% url 'reply_case' case.outward.pk case.pk %}" class="btn btn-primary" role="button">Update</a>
+  </div>
+
+  {% for update in case.updates.all %}
+    <div class="card mb-2 {% if forloop.first %}border-dark{% endif %}">
+      {% if forloop.first %}
+        <div class="card-header text-white bg-dark py-2 px-3">{{ case.progress }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">{{ case.requesting_party_reference_number }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">{{ case.nature_of_information }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">{{ case.taxpayer_status }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">{{ case.point_of_contact_surname }}</div>
+      {% endif %}
+      <div class="card-body p-3">
+        <div class="row">
+          <div class="col-2">
+            <img src="{% static 'img/avatar.svg' %}" alt="{{ update.created_by.username }}" class="w-100">
+            <small>Posts: {{ update.created_by.updates.count }}</small>
+          </div>
+          <div class="col-10">
+            <div class="row mb-3">
+              <div class="col-6">
+                <strong class="text-muted">{{ update.created_by.username }}</strong>
+              </div>
+
+            </div>
+            {{ update.created_at }} : &nbsp;
+            {{ update.notes }}
+            {% if update.initiator == user %}
+              <div class="mt-3">
+                <a href="{% url 'outward_pdf' case.outward.pk case.pk %}" class="btn btn-primary btn-sm" role="button">PDF Report</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+{% endblock %}

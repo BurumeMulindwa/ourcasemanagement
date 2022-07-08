@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'landing' %}">Landing</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'outwards' %}">Outward Cases</li>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'outward_form_upload' %}" class="btn btn-primary">Upload</a>
+</br>
+&nbsp; &nbsp;
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Outward Cases</th>
+        <th>Updates</th>
+        <th>Query</th>
+        <th>Query Type</th>
+        <th>Tax Type</th>
+        <th>Instrument</th>
+        <th>Country</th>
+        <th>History</th>
+        <th>Last Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for outward in outwards %}
+        <tr>
+          <td>
+            <a href="{% url 'outward_cases' outward.pk %}">{{ outward.reference }}</a>
+            <small class="text-muted d-block">{{ outward.subject }}</small>
+          </td>
+          <td class="align-middle">
+            {{ outward.get_updates_count }}
+          </td>
+          <td class="align-middle">
+            {{ outward.query }}
+          </td>
+            <td class="align-middle">
+            {{ outward.query_type }}
+          </td>
+            <td class="align-middle">
+            {{ outward.tax_type }}
+          </td>
+          <td class="align-middle">
+            {{ outward.instrument }}
+          </td>
+          <td class="align-middle">
+            {{ outward.country }}
+          </td>
+          <td><a href="{% url 'case_history' outward.pk %}" class="btn btn-primary">Report</a></td>
+          <td class="align-middle">
+            {% with update=outward.get_last_update %}
+              {% if update %}
+                <small>
+                  <a href="{% url 'case_updates' outward.pk update.case.pk %}">
+                    By {{ update.author.username }} at {{ update.created_at }}
+                  </a>
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em>No updates yet.</em>
+                </small>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<br><br/>
+
+<nav aria-label="...">
+  <ul class="pagination">
+      {% if outwards.has_previous %}
+    <li class="page-item">
+      <span class="page-link" href="?page={{outwards.previous_page_number}}">Previous</span>
+    </li>
+      {% endif %}
+      {% for i in nums %}
+        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+      {% endfor %}
+
+{% if outwards.has_next %}</span>
+    <li class="page-item"><a class="page-link" href="?page={{ outwards.next_page_number }}">Next</a></li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ outwards.paginator.num_pages }}">Last &raquo</a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}

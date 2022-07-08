@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ board.reference }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards' %}">Inward Cases</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'boards' %}">{{ board.reference }}</li>
+{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary">Case Update</a>
+  </div>
+
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Progress</th>
+        <th>Starter</th>
+        <th>Date Created</th>
+        <th>Alerts</th>
+        <th>Case Age</th>
+        <th>Nature of Information requested</th>
+        <th>Nature of Information received</th>
+        <th>Date Process Finished</th>
+        <th>Contact Surname</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for topic in topics %}
+        <tr>
+          <td><a href="{% url 'topic_posts' board.pk topic.pk %}">{{ topic.progress }}</a></td>
+          <td>{{ topic.starter.username }}</td>
+          <td>{{ topic.date_created }}</td>
+          <td><a href="{% url 'topic_alerts' board.pk topic.pk %}" class="btn btn-primary">Check</a></td>
+          <td>{{ topic.whenlasted }}</td>
+          <td>{{ topic.nature_of_information_requested }}</td>
+          <td>{{ topic.nature_of_information_received }}</td>
+          <td>{{ topic.date_process_finished }}</td>
+          <td>{{ topic.point_of_contact_surname }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+   {% include 'includes/pagination.html' %}
+{% endblock %}

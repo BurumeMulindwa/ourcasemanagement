@@ -1,0 +1,37 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+  {{ board.reference }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards' %}">Inward Cases</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'boards' %}">{{ board.reference }}</a></li>
+  <img class="img-fluid" src="{% static 'assets/img/attention_1.jpg' %}" alt="..." />
+    This is a warning!!!
+{% endblock %}
+
+{% block content %}
+
+  {% for post in topic.posts.all %}
+    <div class="card mb-2 {% if forloop.first %}border-dark{% endif %}">
+      {% if forloop.first %}
+        <div class="card-header text-white bg-dark py-2 px-3">You have used {{ topic.whenlasted }} of the {{ topic.time_to_completion }} allocated to implementing this {{ topic.progress }} step</div>
+      <div class="card-header text-white bg-dark py-2 px-3">
+          {% if  topic.whenlasted  > topic.time_to_completion %}
+          DEADLINE EXCEEDED !!!
+          {% endif %}
+        </div>
+        <div class="card-header text-white bg-dark py-2 px-3">Your case have been created on {{ topic.date_created }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">{{ topic.date_closed }}</div>
+        <div class="card-header text-white bg-dark py-2 px-3">by {{ topic.point_of_contact_surname }}</div>
+      {% endif %}
+   </div>
+  {% endfor %}
+
+
+{% endblock %}

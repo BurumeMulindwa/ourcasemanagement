@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Start a New Update{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards' %}">Inward Cases</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'board_topics' board.pk %}">{{ board.reference }}</a></li>
+  <li class="breadcrumb-item active">Case Update</li>
+{% endblock %}
+
+{% block content %}
+  <form id="try" class="form-horizontal" role="form" action="" method="post" >
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    {% for value, text in form.providers.field.choices %}
+  <div class="ui slider checkbox">
+    <input id="id_providers_{{ forloop.counter0 }}" name="{{ form.providers.name }}" type="checkbox" value="{{ value }}"{% if value in checked_providers %} checked="checked"{% endif %}>
+    <label>{{ text }}</label>
+  </div>
+{% endfor %}
+
+    <button type="submit" class="btn btn-success">Post</button>
+  </form>
+&nbsp;
+&nbsp;
+{% endblock %}

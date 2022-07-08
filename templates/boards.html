@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'landing' %}">Landing</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'boards' %}">Inward Cases</li>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'inward_form_upload' %}" class="btn btn-primary">Upload</a>
+</br>
+&nbsp; &nbsp;
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Inward Cases</th>
+        <th>Updates</th>
+        <th>Query</th>
+        <th>Query Type</th>
+        <th>Tax Type</th>
+        <th>Instrument</th>
+        <th>Country</th>
+        <th>History</th>
+        <th>Last Update</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for board in boards %}
+        <tr>
+          <td>
+            <a href="{% url 'board_topics' board.pk %}">{{ board.reference }}</a>
+            <small class="text-muted d-block">{{ board.subject }}</small>
+          </td>
+          <td class="align-middle">
+            {{ board.get_posts_count }}
+          </td>
+          <td class="align-middle">
+            {{ board.query }}
+          </td>
+          <td class="align-middle">
+            {{ board.query_type }}
+          </td>
+          <td class="align-middle">
+            {{ board.tax_type }}
+          </td>
+          <td class="align-middle">
+            {{ board.instrument }}
+          </td>
+          <td class="align-middle">
+            {{ board.country }}
+          </td>
+          <td><a href="{% url 'topic_history' board.pk %}" class="btn btn-primary">Report</a></td>
+          <td class="align-middle">
+            {% with post=board.get_last_post %}
+              {% if post %}
+                <small>
+                  <a href="{% url 'topic_posts' board.pk post.topic.pk %}">
+                    By {{ post.created_by.username }} at {{ post.created_at }}
+                  </a>
+                </small>
+              {% else %}
+                <small class="text-muted">
+                  <em>No updates yet.</em>
+                </small>
+              {% endif %}
+            {% endwith %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+<!--
+{{ boards }}  <br/>
+Has Previous: {{ boards.has_previous }} <br/>
+Has Next: {{ boards.has_next }} <br/>
+Current Page: {{ boards.number }} <br/>
+Number of Pages: {{ boards.paginator.num_pages}} <br/> -->
+<br><br/>
+
+<nav aria-label="...">
+  <ul class="pagination">
+      {% if boards.has_previous %}
+    <li class="page-item">
+      <span class="page-link" href="?page={{boards.previous_page_number}}">Previous</span>
+    </li>
+      {% endif %}
+      {% for i in nums %}
+        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+      {% endfor %}
+
+{% if boards.has_next %}</span>
+    <li class="page-item"><a class="page-link" href="?page={{ boards.next_page_number }}">Next</a></li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ boards.paginator.num_pages }}">Last &raquo</a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+{% endblock %}

@@ -1,0 +1,41 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ board.reference }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'boards' %}">Inward Cases</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'boards' %}">{{ board.reference }}</a></li>
+{% endblock %}
+
+{% block content %}
+
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Progress</th>
+        <th>Lasts</th>
+        <th>Duration</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for topic in topics %}
+        <tr>
+          <td><a>{{ topic.progress }}</a></td>
+          <td>{{ topic.whenlasted }}</td>
+          <td>
+            {{ topic.whenpublished }}
+          {% if topic.progress == case_finalised %}
+            {{ topic.whenlasted }}
+          {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

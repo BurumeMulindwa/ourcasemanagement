@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ outward.reference }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'outwards' %}">Outward Cases</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'outwards' %}">{{ outward.reference }}</a></li>
+{% endblock %}
+
+{% block content %}
+
+
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Progress</th>
+        <th>Lasts</th>
+        <th>Duration</th>
+
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for case in cases %}
+        <tr>
+          <td><a>{{ case.progress }}</a></td>
+          <td>{{ case.whenlasted }}</td>
+          <td>{{ case.whenpublished }}
+             {% if case.progress == case_finalised %}
+               {{ case.whenlasted }}
+             {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

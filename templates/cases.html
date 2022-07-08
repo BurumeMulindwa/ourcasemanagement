@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ outward.reference }} - {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'outwards' %}">Outward Cases</a></li>
+  <li class="breadcrumb-item active"><a href="{% url 'outwards' %}">{{ outward.reference }}</a></li>
+{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <a href="{% url 'new_case' outward.pk %}" class="btn btn-primary">Case Update</a>
+  </div>
+
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Progress</th>
+        <th>Starter</th>
+        <th>Date Created</th>
+        <th>Alerts</th>
+        <th>Case Age</th>
+        <th>Nature of Information requested</th>
+        <th>Nature of Information received</th>
+        <th>Date Process Finished</th>
+        <th>Contact Surname</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for case in cases %}
+        <tr>
+          <td><a href="{% url 'case_updates' outward.pk case.pk %}">{{ case.progress }}</a></td>
+          <td>{{ case.initiator.username }}</td>
+          <td>{{ case.date_created }}</td>
+          <td><a href="{% url 'case_alerts' outward.pk case.pk %}" class="btn btn-primary">Check</a></td>
+          <td>{{ case.whenlasted }}</td>
+          <td>{{ case.nature_of_information_requested }}</td>
+          <td>{{ case.nature_of_information_received }}</td>
+          <td>{{ case.date_process_finished }}</td>
+          <td>{{ case.point_of_contact_surname }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Start a New Update{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'outwards' %}">Outward Cases</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'outward_cases' outward.pk %}">{{ outward.reference }}</a></li>
+  <li class="breadcrumb-item active">Case Update</li>
+{% endblock %}
+
+{% block content %}
+  <form id="try" class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    {% for value, text in form.providers.field.choices %}
+  <div class="ui slider checkbox">
+    <input id="id_providers_{{ forloop.counter0 }}" name="{{ form.providers.name }}" type="checkbox" value="{{ value }}"{% if value in checked_providers %} checked="checked"{% endif %}>
+    <label>{{ text }}</label>
+  </div>
+{% endfor %}
+    <button type="submit" class="btn btn-success">Post</button>
+  </form>
+&nbsp;
+&nbsp;
+{% endblock %}

@@ -1,4 +1,4 @@
-import self
+#import self
 from django.contrib.auth.models import User
 from django.db.models import Count, Sum, Avg
 from django.core.paginator import Paginator
@@ -341,29 +341,4 @@ def outward_pdf(request, pk, case_pk):
     return FileResponse(buf, as_attachment=True, filename='outward.pdf')
 
 
-def inward_form_upload(request):
-    if request.method == 'POST':
-        form = InwardDocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('landing')
-    else:
-        form = InwardDocumentForm()
-        context = {
-            'form': form,
-        }
-    return render(request, 'inward_form_upload.html', {'form': form})
 
-
-def outward_form_upload(request):
-    if request.method == 'POST':
-        form = OutwardDocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('landing')
-    else:
-        form = OutwardDocumentForm()
-        context = {
-            'form': form,
-        }
-    return render(request, 'outward_form_upload.html', {'form': form})

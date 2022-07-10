@@ -1,1 +1,1 @@
-web: gunicorn ourcasemanagement.wsgi
+waitress-serve --listen=*:8000 ourcasemanagement.wsgi

@@ -1,1 +1,1 @@
-web: gunicorn ourcasemanagement.wsgi:application --log-file
+web: gunicorn ourcasemanagement.wsgi

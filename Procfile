@@ -1,1 +1,3 @@
-web: gunicorn ourcasemanagement.wsgi
+web: gunicorn ourcasemanagement.wsgi:application --log-file - --log-level debug
+python manage.py collectstatic --noinput
+manage.py migrate
